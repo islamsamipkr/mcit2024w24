@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "mcitbhrg01" {
   name     = "mcitbhrg"
-  location = "West Europe"
+  location = "canadacentral"
 }
 
 resource "azurerm_virtual_network" "mcitbhrg01" {
