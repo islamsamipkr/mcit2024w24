@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "mcitstorageaccount" {
-  name                     = "storageaccountname"
+  name                     = "bhstorageaccount"
   resource_group_name      = azurerm_resource_group.mcit420zz5um.name
   location                 = azurerm_resource_group.mcit420zz5um.location
   account_tier             = "Standard"
