@@ -20,7 +20,7 @@ variable "storage_account_names" {
   ]
 }
 
-resource "azurerm_storage_account" "mcitstorageaccount" {
+resource "azurerm_storage_account" "mcitstorageaccount2" {
   count                    = length(var.storage_account_names)
   name                     = var.storage_account_names[count.index]
   resource_group_name      = azurerm_resource_group.mcit420zz5um.name
