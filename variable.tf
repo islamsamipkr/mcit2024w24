@@ -11,7 +11,7 @@ variable "client_secret"{
 variable "tenant_id"{
   type=string
 }
-variable "account_tier"{
+variable "bachir"{
   type=string
  default="Premium"
 }
