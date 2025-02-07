@@ -2,7 +2,7 @@ resource "azurerm_storage_account" "mcitstorageaccount" {
   name                     = "storageaccountname"
   resource_group_name      = azurerm_resource_group.mcit420zz5um.name
   location                 = azurerm_resource_group.mcit420zz5um.location
-  account_tier             = var.bachir
+  account_tier             = var.account_tier
   account_replication_type = "GRS"
 
   tags = {
