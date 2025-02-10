@@ -1,3 +1,6 @@
+provider "azurerm" {
+  features {}
+}
 
 variable "regions" {
   type    = list(string)
@@ -24,11 +27,11 @@ resource "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  for_each = { for idx, region in flatten([for region in var.regions : [for i in range(3) : {region = region, index = i}]]) :
-    "${region.region}-${idx}" => region
+  for_each = { for idx, region in flatten([for region in var.regions : [for i in range(3) : { id = "${region}-${i}", region = region }]]) :
+    idx => region
   }
   
-  name                = "nic-${replace(each.value.region, " ", "-")}-${each.value.index}"
+  name                = "nic-${each.value.id}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   
@@ -42,7 +45,7 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_linux_virtual_machine" "vm" {
   for_each = azurerm_network_interface.nic
   
-  name                = "vm-${replace(each.value.location, " ", "-")}-${each.value.index}"
+  name                = "vm-${each.value.id}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = "Standard_DS1_v2"
