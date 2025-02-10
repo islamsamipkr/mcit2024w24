@@ -1,4 +1,6 @@
-
+provider "azurerm" {
+  features {}
+}
 
 variable "regions" {
   type    = list(string)
@@ -6,27 +8,21 @@ variable "regions" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  for_each = toset(var.regions)
-  
-  name     = "rg-${replace(each.value, " ", "-")}"
-  location = each.value
+  name     = "rg-global"
+  location = "East US"
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  for_each = azurerm_resource_group.rg
-  
-  name                = "vnet-${replace(each.value.location, " ", "-")}"
-  location            = each.value.location
-  resource_group_name = each.value.name
+  name                = "vnet-global"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "subnet" {
-  for_each = azurerm_virtual_network.vnet
-  
-  name                 = "subnet-${replace(each.value.location, " ", "-")}"
-  resource_group_name  = each.value.resource_group_name
-  virtual_network_name = each.value.name
+  name                 = "subnet-global"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
@@ -36,12 +32,12 @@ resource "azurerm_network_interface" "nic" {
   }
   
   name                = "nic-${replace(each.value.region, " ", "-")}-${each.value.index}"
-  location            = each.value.region
-  resource_group_name = azurerm_resource_group.rg[each.value.region].name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   
   ip_configuration {
     name                          = "ipconfig1"
-    subnet_id                     = azurerm_subnet.subnet[each.value.region].id
+    subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
   }
 }
@@ -50,8 +46,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   for_each = azurerm_network_interface.nic
   
   name                = "vm-${replace(each.value.location, " ", "-")}-${each.value.index}"
-  resource_group_name = azurerm_resource_group.rg[each.value.location].name
-  location            = each.value.location
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   size                = "Standard_DS1_v2"
   
   admin_username      = "azureuser"
