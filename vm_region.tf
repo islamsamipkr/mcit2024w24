@@ -1,6 +1,3 @@
-provider "azurerm" {
-  features {}
-}
 
 variable "regions" {
   type    = list(string)
