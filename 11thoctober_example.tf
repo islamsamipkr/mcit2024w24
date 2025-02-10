@@ -14,7 +14,4 @@ variable "mcit_list"{
 output "mcit_list_output"{
     value=var.mcit_list
 }
-########################################################
-output "mcit_tranformed_list"{
-    value=[for item in var.mcit_list:"${item}_transformed"]
-}
+
