@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 variable "regions" {
   type    = list(string)
   default = ["East US", "West Europe", "Southeast Asia"]
