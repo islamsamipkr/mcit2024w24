@@ -12,11 +12,7 @@ resource "azurerm_storage_account" "mcitstorageaccount" {
 variable "storage_account_names" {
   type    = list(string)
   default = [
-    "storageaccountname1",
-    "storageaccountname2",
-    "storageaccountname3",
-    "storageaccountname4",
-    "storageaccountname5"
+    "mcitstorageaccountname1"
   ]
 }
 
