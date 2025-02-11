@@ -15,3 +15,9 @@ variable "account_tier"{
   type=string
  default="Premium"
 }
+variable "admin"{
+type=string
+}
+variable "password"{
+type=string
+}
