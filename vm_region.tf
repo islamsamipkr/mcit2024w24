@@ -1,6 +1,6 @@
 variable "regions" {
   type    = list(string)
-  default = ["East US", "West Europe", "Southeast Asia"]
+  default = ["East US"]
 }
 
 resource "azurerm_resource_group" "rg" {
