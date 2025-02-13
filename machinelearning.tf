@@ -1,51 +1,42 @@
+data "azurerm_client_config" "current" {}
 
-resource "azurerm_machine_learning_workspace" "ml_workspace" {
-  name                = "ml-workspace"
-  location            = azurerm_resource_group.ml_rg.location
-  resource_group_name = azurerm_resource_group.ml_rg.name
-  application_insights_id = azurerm_application_insights.ml_insights.id
-  key_vault_id           = azurerm_key_vault.ml_vault.id
-  storage_account_id     = azurerm_storage_account.ml_storage.id
+resource "azurerm_resource_group" "mlrg" {
+  name     = "ml_rg-resources"
+  location = "West Europe"
 }
 
-resource "azurerm_machine_learning_compute_cluster" "ml_compute" {
-  name                = "ml-compute-cluster"
-  location            = azurerm_resource_group.ml_rg.location
-  resource_group_name = azurerm_resource_group.ml_rg.name
-  workspace_name      = azurerm_machine_learning_workspace.ml_workspace.name
-  vm_priority         = "Dedicated"
-  vm_size             = "Standard_DS3_v2"
-  min_instances       = 1
-  max_instances       = 3
+resource "azurerm_application_insights" "applicationinsight" {
+  name                = "workspace-example-ai"
+  location            = azurerm_resource_group.mlrg.location
+  resource_group_name = azurerm_resource_group.mlrg.name
+  application_type    = "web"
 }
 
-resource "azapi_resource" "openai_service" {
-  type      = "Microsoft.CognitiveServices/accounts@2022-12-01"
-  name      = "openai-service"
-  location  = azurerm_resource_group.ml_rg.location
-  parent_id = azurerm_resource_group.ml_rg.id
-
-  body = jsonencode({
-    kind = "OpenAI"
-    sku = {
-      name = "S0"
-    }
-    properties = {}
-  })
+resource "azurerm_key_vault" "azurekeyvault" {
+  name                = "workspaceexamplekeyvault"
+  location            = azurerm_resource_group.mlrg.location
+  resource_group_name = azurerm_resource_group.mlrg.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "premium"
 }
 
-resource "azurerm_machine_learning_inference_endpoint" "ml_endpoint" {
-  name                = "ml-endpoint"
-  location            = azurerm_resource_group.ml_rg.location
-  resource_group_name = azurerm_resource_group.ml_rg.name
-  workspace_name      = azurerm_machine_learning_workspace.ml_workspace.name
+resource "azurerm_storage_account" "azurestorageaccount" {
+  name                     = "workspacestorageaccount"
+  location                 = azurerm_resource_group.mlrg.location
+  resource_group_name      = azurerm_resource_group.mlrg.name
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
 }
 
-output "openai_api_key" {
-  value     = azapi_resource.openai_service.body["properties"]["apiKey"]
-  sensitive = true
-}
+resource "azurerm_machine_learning_workspace" "example" {
+  name                    = "example-workspace"
+  location                = azurerm_resource_group.mlrg.location
+  resource_group_name     = azurerm_resource_group.mlrg.name
+  application_insights_id = azurerm_application_insights.applicationinsight.id
+  key_vault_id            = azurerm_key_vault.azurekeyvault.id
+  storage_account_id      = azurerm_storage_account.azurestorageaccount.id
 
-output "ml_endpoint_url" {
-  value = azurerm_machine_learning_inference_endpoint.ml_endpoint.scoring_uri
+  identity {
+    type = "SystemAssigned"
+  }
 }
