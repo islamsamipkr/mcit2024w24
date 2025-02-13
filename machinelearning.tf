@@ -1,9 +1,4 @@
 
-resource "azurerm_resource_group" "ml_rg" {
-  name     = "ml-resource-group"
-  location = "East US"
-}
-
 resource "azurerm_machine_learning_workspace" "ml_workspace" {
   name                = "ml-workspace"
   location            = azurerm_resource_group.ml_rg.location
@@ -24,11 +19,19 @@ resource "azurerm_machine_learning_compute_cluster" "ml_compute" {
   max_instances       = 3
 }
 
-resource "azurerm_openai_service" "openai" {
-  name                = "openai-service"
-  location            = azurerm_resource_group.ml_rg.location
-  resource_group_name = azurerm_resource_group.ml_rg.name
-  sku_name            = "S0"
+resource "azapi_resource" "openai_service" {
+  type      = "Microsoft.CognitiveServices/accounts@2022-12-01"
+  name      = "openai-service"
+  location  = azurerm_resource_group.ml_rg.location
+  parent_id = azurerm_resource_group.ml_rg.id
+
+  body = jsonencode({
+    kind = "OpenAI"
+    sku = {
+      name = "S0"
+    }
+    properties = {}
+  })
 }
 
 resource "azurerm_machine_learning_inference_endpoint" "ml_endpoint" {
@@ -39,7 +42,7 @@ resource "azurerm_machine_learning_inference_endpoint" "ml_endpoint" {
 }
 
 output "openai_api_key" {
-  value     = azurerm_openai_service.openai.primary_access_key
+  value     = azapi_resource.openai_service.body["properties"]["apiKey"]
   sensitive = true
 }
 
