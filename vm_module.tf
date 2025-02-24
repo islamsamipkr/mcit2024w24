@@ -13,5 +13,4 @@ module "mcit_vm" {
   storage_account_type         = "Standard_LRS"
   boot_diagnostics             = true
   delete_os_disk_on_termination = true
-  delete_data_disks_on_termination = true
 }
