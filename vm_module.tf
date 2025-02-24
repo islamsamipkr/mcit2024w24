@@ -1,4 +1,4 @@
-]module "mcit_vm" {
+module "mcit_vm" {
   source = "github.com/islamsamipkr/mcit-terraform-azurerm-vm"
 
   resource_group_name          = "myResourceGroup"
