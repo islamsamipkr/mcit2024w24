@@ -14,3 +14,7 @@ resource "azurerm_resource_group" "mcit420zz5um4" {
   name     = "mcit_resource_group_w24_4"
   location = "canadacentral"
 }
+resource "azurerm_resource_group" "azureresourcegroup" {
+  name     = "mcit_resource_group_w24_5"
+  location = "canadacentral"
+}
