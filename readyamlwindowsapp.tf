@@ -1,19 +1,6 @@
 #create windows app using yaml
 locals{
   folderlocation="mcityaml"
-  linux_app=[for file in fileset("${path.module}/${local.folderlocation}", "[^_]*.yaml") : yamldecode(file("${path.module}/${local.folderlocation}/${f}"))]
-  linux_app_list = flatten([
-    for app in local.linux_app : [
-      for linuxapps in try(app.listoflinuxapp, []) :{
-        name=linuxapps.name
-        os_type=linuxapps.os_type
-        sku_name=linuxapps.sku_name     
-      }
-    ]
-])
-#create windows app using yaml
-locals{
-  folderlocation="mcityaml"
   windows_app=[for file in fileset("${path.module}/${local.folderlocation}", "[^_]*.yaml") : yamldecode(file("${path.module}/${local.folderlocation}/${f}"))]
   windows_app_list = flatten([
     for app in local.windows_app : [
