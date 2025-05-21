@@ -1,0 +1,10 @@
+windowsapplist:
+  - name: firstwindowsapp    
+    os_type: Windows
+    sku_name: P5mv3
+  - name: secondwindowsapp    
+    os_type: Windows
+    sku_name: P5mv3
+  - name: thirdwindowsapp    
+    os_type: Windows
+    sku_name: P5mv3
