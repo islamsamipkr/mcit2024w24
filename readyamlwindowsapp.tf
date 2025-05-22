@@ -22,9 +22,6 @@ locals{
     ]
 ])*/
 }
-
-
-
 resource "azurerm_service_plan" "mcitwindowsserviceplan" {
   for_each            ={for sp in local.windows_app_list: "${sp.name}"=>sp }
   name                = each.value.name
