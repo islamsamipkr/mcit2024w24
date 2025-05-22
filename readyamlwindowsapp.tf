@@ -10,7 +10,9 @@ locals{
         sku_name=windowsapps.sku_name     
       }
     ]
-])}
+])
+}
+
 resource "azurerm_resource_group" "mcitdevrm" {
   name     = "mcitwindowsapp"
   location = "canadacentral"
