@@ -24,7 +24,7 @@ resource "azurerm_kubernetes_cluster" "mcitkubecluster" {
 resource "azurerm_kubernetes_cluster_node_pool" "mcitnodepools" {
   for_each = local.node_pools
 
-  name                  = "mcit-${each.key}"
+  name                  = "mcit${each.key}"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.mcitkubecluster.id
   vm_size               = each.value.vm_size
   node_count            = each.value.node_count
