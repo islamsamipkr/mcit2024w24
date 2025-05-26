@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "mcitvmrm" {
 }
 
 
-resource "azurerm_virtual_network" "mcitvirtualnetwork" {
+resource "azurerm_virtual_network" "mcitvmvirtualnetwork" {
   name                = "mcit-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.mcitvmrm.location
@@ -23,7 +23,7 @@ resource "azurerm_virtual_network" "mcitvirtualnetwork" {
 resource "azurerm_subnet" "mcitvmsubnet" {
   name                 = "subnet1"
   resource_group_name  = azurerm_resource_group.mcitvmrm.name
-  virtual_network_name = azurerm_virtual_network.mcitvirtualnetwork.name
+  virtual_network_name = azurerm_virtual_network.mcitvmvirtualnetwork.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
