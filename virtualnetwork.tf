@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "mcitvirtualnetwork" {
 }
 
 resource "azurerm_subnet" "subnets" {
-  for_each             = { for idx, cidr in local.cidrs : "subnet${idx + 1}" => cidr }
+  for_each             = { for index, cidr in local.cidrs : "subnet${index + 1}" => cidr }
   name                 = each.key
   resource_group_name  = azurerm_resource_group.mcitnetworkrg.name
   virtual_network_name = azurerm_virtual_network.mcitvirtualnetwork.name
