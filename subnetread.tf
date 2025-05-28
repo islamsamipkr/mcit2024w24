@@ -22,3 +22,10 @@ resource "azurerm_subnet" "mcitazuresubnet" {
   virtual_network_name = azurerm_virtual_network.mcitvnetmay.name
   address_prefixes     = [each.value]
 }
+output "raw_yaml" {
+  value = file("${path.module}/subnets.yaml")
+}
+
+output "decoded_yaml" {
+  value = yamldecode(file("${path.module}/subnets.yaml"))
+}
