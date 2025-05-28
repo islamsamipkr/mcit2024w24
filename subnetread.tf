@@ -1,9 +1,9 @@
 locals {
-  folderlocation = "mcitsubnetyaml"
+  subnetfolderlocation = "mcitsubnetyaml"
 
   subnet_yaml_files = [
-    for file in fileset("${path.module}/${local.folderlocation}", "subnets.yaml") :
-    yamldecode(file("${path.module}/${local.folderlocation}/${file}"))
+    for file in fileset("${path.module}/${local.subnetfolderlocation}", "subnets.yaml") :
+    yamldecode(file("${path.module}/${local.subnetfolderlocation}/${file}"))
   ]
 
   subnet_map = local.subnet_yaml_files[0].subnets
