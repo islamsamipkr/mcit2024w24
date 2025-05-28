@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "mlrg" {
 }
 
 resource "azurerm_application_insights" "applicationinsight" {
-  name                = "workspace-example-ai"
+  name                = "workspace-mcit-ai"
   location            = azurerm_resource_group.mlrg.location
   resource_group_name = azurerm_resource_group.mlrg.name
   application_type    = "web"
@@ -28,8 +28,8 @@ resource "azurerm_storage_account" "azurestorageaccount" {
   account_replication_type = "GRS"
 }
 
-resource "azurerm_machine_learning_workspace" "example" {
-  name                    = "example-workspace"
+resource "azurerm_machine_learning_workspace" "azuremlworkspace" {
+  name                    = "mcit-workspace"
   location                = azurerm_resource_group.mlrg.location
   resource_group_name     = azurerm_resource_group.mlrg.name
   application_insights_id = azurerm_application_insights.applicationinsight.id
