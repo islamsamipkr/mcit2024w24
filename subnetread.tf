@@ -2,7 +2,7 @@ locals {
   subnetfolderlocation = "mcitsubnetyaml"
 
   subnet_yaml_files = [
-    for file in fileset("${path.module}/${local.subnetfolderlocation}", "subnets.yaml") :
+    for file in fileset("${path.module}/${local.subnetfolderlocation}", "[^_]*.yaml") :
     yamldecode(file("${path.module}/${local.subnetfolderlocation}/${file}"))
   ]
 
