@@ -1,24 +1,38 @@
 locals {
-  subnet_config_raw = yamldecode(file("${path.module}/subnets.yaml"))
-  subnet_config     = local.subnet_config_raw["subnets"]
+  folderlocation = "mcitsubnetyaml"
+
+  subnet_yaml_files = [
+    for file in fileset("${path.module}/${local.folderlocation}", "subnets.yaml") :
+    yamldecode(file("${path.module}/${local.folderlocation}/${file}"))
+  ]
+
+  subnet_map = local.subnet_yaml_files[0].subnets
+
+  subnet_list = [
+    for key, value in local.subnet_map : {
+      name   = key
+      cidr   = value
+    }
+  ]
 }
 
-resource "azurerm_resource_group" "mcitsubnetrm" {
-  name     = "mcitsubnet-resources"
-  location = "East US"
+resource "azurerm_resource_group" "azuremcitsubnetrg" {
+  name     = "mcitazuresubnet-rg"
+  location = "canadacentral"
 }
 
-resource "azurerm_virtual_network" "mcitvnetmay" {
-  name                = "mcitmay-vnet"
-  location            = azurerm_resource_group.mcitsubnetrm.location
-  resource_group_name = azurerm_resource_group.mcitsubnetrm.name
+resource "azurerm_virtual_network" "azurevnsubnet" {
+  name                = "example-vnet"
+  location            = azurerm_resource_group.azuremcitsubnetrg.location
+  resource_group_name = azurerm_resource_group.azuremcitsubnetrg.name
   address_space       = ["10.0.0.0/16"]
 }
 
-resource "azurerm_subnet" "mcitazuresubnet" {
-  for_each             = local.subnet_config
-  name                 = each.key
-  resource_group_name  = azurerm_resource_group.mcitsubnetrm.name
-  virtual_network_name = azurerm_virtual_network.mcitvnetmay.name
-  address_prefixes     = [each.value]
+resource "azurerm_subnet" "azurermsubnetcreation" {
+  for_each = { for s in local.subnet_list : s.name => s }
+
+  name                 = each.value.name
+  resource_group_name  = azurerm_resource_group.azuremcitsubnetrg.name
+  virtual_network_name = azurerm_virtual_network.azurevnsubnet.name
+  address_prefixes     = [each.value.cidr]
 }
