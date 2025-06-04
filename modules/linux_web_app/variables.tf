@@ -19,14 +19,10 @@ variable "service_plan_name" {
   type = string
 }
 
-variable "service_plan_tier" {
-  type    = string
-  default = "Basic"
-}
-
-variable "service_plan_size" {
-  type    = string
-  default = "B1"
+variable "service_plan_sku_name" {
+  type        = string
+  description = "The SKU name for the App Service Plan (e.g., B1, S1, P1v3)"
+  default     = "B1"
 }
 
 variable "site_config" {
