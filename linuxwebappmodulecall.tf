@@ -3,7 +3,7 @@ module "linux_web_app" {
   name                = "my-linux-web-app"
   location            = "East US"
   resource_group_name = "my-resource-group"
-  service_plan_id     = azurerm_app_service_plan.example.id
+  service_plan_id     = azurerm_app_service_plan.mcitmoduleserviceplan.id
   tags = {
     environment = "production"
   }
