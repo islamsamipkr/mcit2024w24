@@ -1,5 +1,5 @@
 module "linux_web_app" {
-  source              = "./module/linux_web_app/linux-web-app"
+  source              = "./module/linux_web_app"
   name                = "my-linux-web-app"
   location            = "East US"
   resource_group_name = "my-resource-group"
