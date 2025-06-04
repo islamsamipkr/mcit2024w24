@@ -1,12 +1,33 @@
-variable "name" { type = string }
-variable "location" { type = string }
-variable "resource_group_name" { type = string }
-variable "tags" { default = {} type = map(string) }
+variable "name" {
+  type = string
+}
 
+variable "location" {
+  type = string
+}
 
-variable "service_plan_name" { type = string }
-variable "service_plan_tier" { type = string default = "Basic" }
-variable "service_plan_size" { type = string default = "B1" }
+variable "resource_group_name" {
+  type = string
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}
+
+variable "service_plan_name" {
+  type = string
+}
+
+variable "service_plan_tier" {
+  type    = string
+  default = "Basic"
+}
+
+variable "service_plan_size" {
+  type    = string
+  default = "B1"
+}
 
 variable "site_config" {
   type = object({
