@@ -1,8 +1,8 @@
 module "linux_web_app" {
   source              = "./module/linux_web_app"
-  name                = "my-linux-web-app"
-  location            = "East US"
-  resource_group_name = "my-resource-group"
+  name                = "mcit-linux-web-app"
+  resource_group_name = azurerm_resource_group.mcit420zz5um.name
+  location            = azurerm_resource_group.mcit420zz5um.location
   service_plan_id     = azurerm_app_service_plan.mcitmoduleserviceplan.id
   tags = {
     environment = "production"
